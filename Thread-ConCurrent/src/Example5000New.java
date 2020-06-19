@@ -5,7 +5,41 @@
 
 /**
  * 面向对象的写法
+ * class Test {
+ *     public synchronized void increment() {
+ *
+ *     }
+ * }
+ *
+ * 等价于
+ *
+ * class Test {
+ *     public void increment() {
+ *         synchronized (this) {
+ *
+ *         }
+ *     }
+ * }
  **/
+
+/**
+ * class Test {
+ *     public synchronized static void increment() {
+ *
+ *     }
+ * }
+ *
+ * 等价于
+ *
+ * class Test {
+ *     public static void increment() {
+ *         synchronized (Test.class) {
+ *
+ *         }
+ *     }
+ * }
+ **/
+
 public class Example5000New {
 
     public static void main(String[] args) throws InterruptedException {
@@ -34,22 +68,16 @@ public class Example5000New {
 class Room {
     private int counter = 0;
 
-    public void increment() {
-        synchronized (this) {
-            counter++;
-        }
+    public synchronized void increment() {
+        counter++;
     }
 
-    public void decrement() {
-        synchronized (this) {
-            counter--;
-        }
+    public synchronized void decrement() {
+        counter--;
     }
 
-    public int getCounter() {
-        synchronized (this) {
-            return counter;
-        }
+    public synchronized int getCounter() {
+        return counter;
     }
 }
 
