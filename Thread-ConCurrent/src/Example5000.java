@@ -25,16 +25,16 @@ public class Example5000 {
 
     public static void main(String[] args) throws InterruptedException {
         Thread t1 = new Thread(() -> {
-           for (int i = 0; i < 5000; i++) {
-               synchronized (object) {
-                   counter++;
-               }
-           }
+            synchronized (object) {
+                for (int i = 0; i < 5000; i++) {
+                    counter++;
+                }
+            }
         });
 
         Thread t2 = new Thread(() -> {
-            for (int i = 0; i < 5000; i++) {
-                synchronized (object) {
+            synchronized (object) {
+                for (int i = 0; i < 5000; i++) {
                     counter--;
                 }
             }
@@ -42,6 +42,15 @@ public class Example5000 {
 
         t1.start();
         t2.start();
+//        while (true) {
+//            Thread.State t1State = t1.getState();
+//            Thread.State t2State = t2.getState();
+//            System.out.println("t1  " + t1State);
+//            System.out.println("t2  " + t2State);
+//            if (t1State.equals(Thread.State.TERMINATED) && t2State.equals(Thread.State.TERMINATED)) {
+//                break;
+//            }
+//        }
         t1.join();
         t2.join();
 
