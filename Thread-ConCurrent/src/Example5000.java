@@ -21,11 +21,11 @@ public class Example5000 {
 
     static int counter = 0;
 
-    static final Object object = new Object();
+    static final Object room = new Object();
 
     public static void main(String[] args) throws InterruptedException {
         Thread t1 = new Thread(() -> {
-            synchronized (object) {
+            synchronized (room) {
                 for (int i = 0; i < 5000; i++) {
                     counter++;
                 }
@@ -33,7 +33,7 @@ public class Example5000 {
         });
 
         Thread t2 = new Thread(() -> {
-            synchronized (object) {
+            synchronized (room) {
                 for (int i = 0; i < 5000; i++) {
                     counter--;
                 }
