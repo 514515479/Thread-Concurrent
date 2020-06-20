@@ -13,7 +13,7 @@ import java.util.List;
  * 原因：
  *     线程1执行add操作，时间片结束，size还没修改，别的线程执行add后；线程1重新执行，修改size，最终size加1其实应该是加2的
  *
- * 把list改为局部变量后就没有问题了
+ * 把list改为局部变量后（没有暴露给外部）就线程安全了
  **/
 public class UnsafeList {
 
