@@ -17,7 +17,9 @@
  *     }
  *     //干活
  * }
+ *
  * 另一个线程
+ *
  * synchronized(lock) {
  *     lock.notifyAll();
  * }
