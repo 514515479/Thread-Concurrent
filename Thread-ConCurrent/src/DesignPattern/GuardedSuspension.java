@@ -5,7 +5,6 @@ package DesignPattern;
  * @Date: 2020/6/21 21:58
  **/
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,7 +45,7 @@ class GuardedObject {
 
     public Object get() {
         synchronized (lock) {
-            //条件不满足则等待
+            //条件不满足则等待（还没获取到结果）
             while (response == null) {
                 try {
                     System.out.println("thread waiting...");
@@ -61,7 +60,7 @@ class GuardedObject {
 
     public void complete(Object response) {
         synchronized (lock) {
-            //条件满足，通知等待线程
+            //条件满足，通知等待线程（已经得到结果）
             this.response = response;
             System.out.println("get response, return");
             lock.notifyAll();
