@@ -5,7 +5,7 @@
 
 /**
  * wait方法会让线程进入WAITING状态，释放锁。必须获取到锁的时候才能使用（和synchronized一起使用）
- * notify//notifyAll方法可以唤醒WAITING的线程，但是不是马上就获取cpu时间片
+ * notify//notifyAll方法可以唤醒WAITING的线程，但不是马上就分配到cpu时间片
  **/
 public class WaitNotifyThread {
 
