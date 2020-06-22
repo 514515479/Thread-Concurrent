@@ -1,4 +1,4 @@
-package DesignPattern.finallyVersion;
+package DesignPattern.guardedFinallyVersion;
 
 /**
  * @Author: tobi
