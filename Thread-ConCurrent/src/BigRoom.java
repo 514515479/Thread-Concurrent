@@ -27,23 +27,23 @@ class Rooms {
 
     public void study() {
         synchronized (studyRoom) {
+            System.out.println("学习2秒...");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("学习2秒...");
         }
     }
 
     public void sleep() {
         synchronized (sleepRoom) {
+            System.out.println("睡觉1秒...");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("睡觉1秒...");
         }
     }
 }
