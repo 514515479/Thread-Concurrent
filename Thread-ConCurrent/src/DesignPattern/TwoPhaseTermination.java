@@ -1,9 +1,8 @@
-package DesignPattern; /**
+package DesignPattern;
+/**
  * @Author: tobi
  * @Date: 2020/6/19 14:50
- **/
-
-/**
+ *
  * 两阶段终止模式
  **/
 public class TwoPhaseTermination {

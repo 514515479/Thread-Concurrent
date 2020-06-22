@@ -1,12 +1,10 @@
-/**
- * @Author: tobi
- * @Date: 2020/6/20 14:50
- **/
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * @Author: tobi
+ * @Date: 2020/6/20 14:50
+ *
  * 局部变量例子
  *
  * 共享变量List add方法的线程安全问题

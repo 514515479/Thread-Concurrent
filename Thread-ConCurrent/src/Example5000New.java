@@ -1,10 +1,9 @@
 /**
  * @Author: tobi
  * @Date: 2020/6/19 22:41
- **/
-
-/**
+ *
  * 面向对象的写法
+ * 1.
  * class Test {
  *     public synchronized void increment() {
  *
@@ -20,9 +19,8 @@
  *         }
  *     }
  * }
- **/
-
-/**
+ *
+ * 2.
  * class Test {
  *     public synchronized static void increment() {
  *

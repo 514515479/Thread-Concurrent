@@ -4,11 +4,10 @@ import java.util.concurrent.FutureTask;
 /**
  * @Author: tobi
  * @Date: 2020/6/18 17:16
- **/
-
-/**
+ *
  * 创建线程
  **/
+
 public class CreateThread {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 

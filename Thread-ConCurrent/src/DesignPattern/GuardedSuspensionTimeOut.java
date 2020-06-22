@@ -1,14 +1,12 @@
 package DesignPattern;
 
-/**
- * @Author: tobi
- * @Date: 2020/6/21 21:58
- **/
-
 import java.util.Arrays;
 import java.util.List;
 
 /**
+ * @Author: tobi
+ * @Date: 2020/6/21 21:58
+ *
  * 同步模式之保护性暂停，用在一个线程等待另一个线程的执行结果。
  * 要点：
  * 有一个结果需要从一个线程传递到另一个线程，让他们关联同一个GuardedObject

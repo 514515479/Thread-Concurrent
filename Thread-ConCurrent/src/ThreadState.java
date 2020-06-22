@@ -1,9 +1,7 @@
 /**
  * @Author: tobi
  * @Date: 2020/6/19 16:06
- **/
-
-/**
+ *
  * 线程6种状态（API层面）
  **/
 public class ThreadState {
