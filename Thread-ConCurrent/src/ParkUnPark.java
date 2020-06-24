@@ -20,6 +20,7 @@ public class ParkUnPark {
             }
             System.out.println("park...");
             //WAITING状态
+            //当没有“许可”时，线程暂停运行，有“许可”时，用掉这个“许可”，线程恢复运行
             LockSupport.park();
             System.out.println("恢复");
         });
@@ -31,6 +32,7 @@ public class ParkUnPark {
             e.printStackTrace();
         }
         System.out.println("unpark...");
+        //给t1发放“许可”，调用多次unpark(t1)也只发放一个“许可”
         LockSupport.unpark(t1);
     }
 }
