@@ -8,6 +8,13 @@ package DesignPattern;
  **/
 public class Singleton {
     //加volatile防止指令重排
+    //解析：
+    //17 表示创建对象，将对象引用入栈 // new Singleton
+    //20 表示复制一份对象引用 // 引用地址
+    //21 表示利用一个对象引用，调用构造方法
+    //24 表示利用一个对象引用，赋值给 static INSTANCE
+    //也许 jvm 会优化为：先执行 24，再执行 21。
+    //（线程A还未完全将构造方法执行完毕，如果在构造方法中要执行很多初始化操作，那么线程B拿到的是将是一个未初始化完毕的单例）
     private volatile static Singleton INSTANCE = null;
 
     public Singleton () {}
