@@ -8,9 +8,7 @@ package DesignPattern;
  **/
 public class Singleton {
     //加volatile防止指令重排
-    //解析：
-    //17 表示创建对象，将对象引用入栈 // new Singleton
-    //20 表示复制一份对象引用 // 引用地址
+    //解析：INSTANCE = new Singleton()不是原子操作，可以先赋值，再进行new操作。
     //21 表示利用一个对象引用，调用构造方法
     //24 表示利用一个对象引用，赋值给 static INSTANCE
     //也许 jvm 会优化为：先执行 24，再执行 21。
@@ -28,7 +26,7 @@ public class Singleton {
                 //A获取了锁，判断INSTANCE==null，实例化了Singleton，释放了锁，
                 //B等待A释放了锁，B获取锁了，如果没有第二个判断，那么B还会去new Singleton()，再创建一个实例。
                 if (INSTANCE == null) {
-                    return new Singleton();
+                    INSTANCE = new Singleton();
                 }
             }
         }
