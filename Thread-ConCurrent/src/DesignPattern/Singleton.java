@@ -8,7 +8,8 @@ package DesignPattern;
  **/
 public class Singleton {
     //加volatile防止指令重排
-    //解析：INSTANCE = new Singleton()不是原子操作，可以先赋值，再进行new操作。
+    //解析：
+    // 问题出在INSTANCE = new Singleton()不是原子操作，可以先赋值，再进行new操作。
     //21 表示利用一个对象引用，调用构造方法
     //24 表示利用一个对象引用，赋值给 static INSTANCE
     //也许 jvm 会优化为：先执行 24，再执行 21。
