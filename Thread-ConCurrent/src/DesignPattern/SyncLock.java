@@ -46,7 +46,7 @@ public class SyncLock extends ReentrantLock {
                 //没signal前不执行，由上一个执行的线程通知下一个线程signal
                 current.await();
                 System.out.print(str);
-                //通知下一个线程执行
+                //通知下一个执行
                 next.signal();
             } catch (InterruptedException e) {
                 e.printStackTrace();
