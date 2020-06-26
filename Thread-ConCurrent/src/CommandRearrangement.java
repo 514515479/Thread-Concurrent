@@ -15,6 +15,14 @@
  * 情况3：线程2执行到flag=true，切换到线程1，进入if结果是4。
  * 情况4：发生指令重排，num = 2和flag = true，先执行flag = true（method2的两条指令顺序变化不影响结果），切换到线程1，num为0，
  *       再切换到线程2，结果是2.
+ *
+ * volatile实现原理是内存屏障
+ * 1.对volatile变量读之前会加入读屏障。
+ *     （保证在该屏障之后，对变量的读取，加载的是主内存中的数据）
+ *     （保证指令重排时，不会将读屏障之后的代码，排在写屏障之前）
+ * 2.对volatile变量写之后会加入写屏障。
+ *     （保证在该屏障之前，对变量的改动，都同步到主内存中）
+ *     （保证指令重排时，不会将写屏障之前的代码，排在写屏障之后）
  **/
 public class CommandRearrangement {
 
@@ -44,6 +52,7 @@ public class CommandRearrangement {
     }
 
     private static void method1(IResult iResult) {
+        //读屏障
         if (flag) {
             iResult.r = num + num;
         } else {
@@ -54,6 +63,7 @@ public class CommandRearrangement {
     private static void method2(IResult iResult) {
         num = 2;
         flag = true;
+        //写屏障
     }
 }
 
