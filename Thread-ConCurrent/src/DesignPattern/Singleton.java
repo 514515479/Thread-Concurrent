@@ -16,7 +16,7 @@ public class Singleton {
     //（线程A还未完全将构造方法执行完毕，如果在构造方法中要执行很多初始化操作，那么线程B拿到的是将是一个未初始化完毕的单例）
     private volatile static Singleton INSTANCE = null;
 
-    public Singleton () {}
+    private Singleton () {}
 
     public Singleton getInstance() {
         //这个if是为了在单例对象已经创建的情况下，不用进入synchronized，synchronized耗性能
