@@ -3,10 +3,7 @@ package juc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicIntegerArray;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.atomic.AtomicStampedReference;
+import java.util.concurrent.atomic.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -32,7 +29,8 @@ public class Atomic {
     public static void main(String[] args) {
         //method1();
         //method2();
-        method3();
+        //method3();
+        method4();
     }
 
     //原子整数
@@ -80,7 +78,7 @@ public class Atomic {
         }).start();
     }
 
-    //原子数组
+    //原子数组（保护数组里面的元素）
     public static void method3() {
         //线程不安全
         demo(
@@ -132,5 +130,24 @@ public class Atomic {
             }
         });
         printConsumer.accept(array);
+    }
+
+    //字段更新器（可以针对对象的某个域（Field）进行原子操作，只能配合 volatile 修饰的字段使用，否则会出现异常）
+    public  static void method4() {
+        Student stu = new Student();
+        AtomicReferenceFieldUpdater updater = AtomicReferenceFieldUpdater.newUpdater(Student.class, String.class, "name");
+        //参数1：要修改的对象，参数2：字段的原始属性值，参数3：字段要修改的值
+        System.out.println(updater.compareAndSet(stu, null, "张三"));
+    }
+
+}
+
+class Student {
+    //必须用volatile修饰
+    volatile String name;
+
+    @Override
+    public String toString() {
+        return "Student{" + "name'" + name + '\'' + '}';
     }
 }
