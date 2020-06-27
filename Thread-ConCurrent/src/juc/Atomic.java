@@ -1,7 +1,16 @@
 package juc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicStampedReference;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * @Author: tobi
@@ -17,10 +26,13 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Atomic {
 
     private static AtomicReference<String> ref = new AtomicReference<>("A");
+    //带版本号的原子引用
+    //AtomicStampedReference<String> ref = new AtomicStampedReference<>("A", 0);
 
     public static void main(String[] args) {
         //method1();
-        method2();
+        //method2();
+        method3();
     }
 
     //原子整数
@@ -43,11 +55,17 @@ public class Atomic {
             e.printStackTrace();
         }
         System.out.println("A改成C：" + ref.compareAndSet(prev, "C"));
+        //带版本号的原子引用，可以识别到ABA的改动
+        //int stamp = ref.getStamp();
+        //System.out.println("A改成C：" + ref.compareAndSet(prev, "C", stamp, stamp + 1));
     }
     //AtomicReference的ABA问题，主线程感知不到别的线程修改过共享变量的值
     public static void other() {
         new Thread(() -> {
             System.out.println("A改成B：" + ref.compareAndSet(ref.get(), "B"));
+            //带版本号的原子引用
+            //int stamp = ref.getStamp();
+            //System.out.println("A改成B：" + ref.compareAndSet(ref.get(), "B", stamp, stamp + 1));
         }).start();
         try {
             Thread.sleep(500);
@@ -56,6 +74,63 @@ public class Atomic {
         }
         new Thread(() -> {
             System.out.println("B改成A：" + ref.compareAndSet(ref.get(), "A"));
+            //带版本号的原子引用
+            //int stamp = ref.getStamp();
+            //System.out.println("A改成B：" + ref.compareAndSet(ref.get(), "B", stamp, stamp + 1));
         }).start();
+    }
+
+    //原子数组
+    public static void method3() {
+        //线程不安全
+        demo(
+                ()->new int[10],
+                (array)->array.length,
+                (array, index) -> array[index]++,
+                array-> System.out.println(Arrays.toString(array))
+        );
+        //线程安全
+        demo(
+                ()-> new AtomicIntegerArray(10),
+                (array) -> array.length(),
+                (array, index) -> array.getAndIncrement(index),
+                array -> System.out.println(array)
+        );
+    }
+    /**
+     参数1，提供数组、可以是线程不安全数组或线程安全数组
+     参数2，获取数组长度的方法
+     参数3，自增方法，回传 array, index
+     参数4，打印数组的方法
+     */
+    // supplier 提供者 无中生有 ()->结果
+    // function 函数 一个参数一个结果 (参数)->结果 , BiFunction (参数1,参数2)->结果
+    // consumer 消费者 一个参数没结果 (参数)->void, BiConsumer (参数1,参数2)->
+    private static <T> void demo(
+            Supplier<T> arraySupplier,
+            Function<T, Integer> lengthFun,
+            BiConsumer<T, Integer> putConsumer,
+            Consumer<T> printConsumer ) {
+        List<Thread> ts = new ArrayList<>();
+        T array = arraySupplier.get();
+        int length = lengthFun.apply(array);
+        for (int i = 0; i < length; i++) {
+            //每个线程对数组作 10000 次操作
+            ts.add(new Thread(() -> {
+                for (int j = 0; j < 10000; j++) {
+                    putConsumer.accept(array, j%length);
+                }
+            }));
+        }
+        ts.forEach(Thread::start); // 启动所有线程
+        ts.forEach(t -> {
+            try {
+                //等所有线程结束
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        printConsumer.accept(array);
     }
 }
