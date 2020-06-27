@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 在单核CPU和多核CPU下都能够保证。
  *
  * cas和volatile
- * cas必须配合volatile才能获取到共享变量的最新值（利用了volatile的可见性）
+ * cas必须配合volatile才能获取到共享变量的最新值，来实现“比较并交换”（利用了volatile的可见性）
  * 例如AtomicInteger保存值的value属性，就用volatile修饰。
  **/
 public interface AccountCAS {
