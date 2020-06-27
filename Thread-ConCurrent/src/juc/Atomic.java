@@ -26,11 +26,14 @@ public class Atomic {
     //带版本号的原子引用
     //AtomicStampedReference<String> ref = new AtomicStampedReference<>("A", 0);
 
+    private static LongAdder longAdder = new LongAdder();
+
     public static void main(String[] args) {
         //method1();
         //method2();
         //method3();
-        method4();
+        //method4();
+        method5();
     }
 
     //原子整数
@@ -138,6 +141,12 @@ public class Atomic {
         AtomicReferenceFieldUpdater updater = AtomicReferenceFieldUpdater.newUpdater(Student.class, String.class, "name");
         //参数1：要修改的对象，参数2：字段的原始属性值，参数3：字段要修改的值
         System.out.println(updater.compareAndSet(stu, null, "张三"));
+    }
+
+    //原子累加器（性能比AtomicInteger好）
+    public  static void method5() {
+        longAdder.increment();
+        System.out.println(longAdder.intValue());
     }
 
 }
