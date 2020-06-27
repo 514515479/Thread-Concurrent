@@ -9,6 +9,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Date: 2020/6/27 16:19
  *
  * 线程不安全的账户取钱例子，AtomicInteger，cas解决（无锁）这个效率高一些
+ *
+ * cas的底层是lock cmpxchg指令（X86架构）在cpu的指令级别实现原子性。
+ * 在单核CPU和多核CPU下都能够保证。
+ *
+ * cas和volatile
+ * cas必须配合volatile才能获取到共享变量的最新值（利用了volatile的可见性）
+ * 例如AtomicInteger保存值的value属性，就用volatile修饰。
  **/
 public interface AccountCAS {
     //获取余额
