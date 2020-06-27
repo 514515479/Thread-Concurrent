@@ -1,4 +1,4 @@
-package subject;
+package juc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Author: tobi
  * @Date: 2020/6/27 16:19
  *
- * 线程不安全的账户取钱例子，AtomicInteger，cas解决（无锁）这个效率高一些
+ * 线程不安全的账户取钱例子，AtomicInteger，cas解决（无锁）这个效率高一些（适合线程数少，多核cpu的场景）
+ *
+ * 为什么无锁效率高
+ *     1.无锁情况下，即使重试失败，线程始终在高速运行，而synchronized会让线程在没有获得锁的时候，发生上下文切换，进入阻塞。
+ *     2.但无锁情况下，因为线程要保持运行，需要额外 CPU 的支持，CPU 在这里就好比高速跑道，没有额外的跑道，线程想高速运行也无从谈起，
+ *       虽然不会进入阻塞，但由于没有分到时间片，仍然会进入可运行状态，还是会导致上下文切换。（线程数不大于CPU核心数）
+ *
  *
  * cas的底层是lock cmpxchg指令（X86架构）在cpu的指令级别实现原子性。
  * 在单核CPU和多核CPU下都能够保证。
@@ -80,6 +86,9 @@ class AccountSafe implements AccountCAS {
                 break;
             }
         }
+
+        // 可以简化为下面的方法
+        //balance.addAndGet(-amount);
     }
 }
 
