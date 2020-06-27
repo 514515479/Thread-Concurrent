@@ -1,4 +1,4 @@
-package DesignPattern;
+package subject;
 
 /**
  * @Author: tobi
