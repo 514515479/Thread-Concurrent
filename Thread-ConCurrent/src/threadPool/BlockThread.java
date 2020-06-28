@@ -15,7 +15,18 @@ import java.util.concurrent.locks.ReentrantLock;
  **/
 public class BlockThread {
     public static void main(String[] args) {
-        ThreadPool threadPool = new ThreadPool(2, 10, TimeUnit.MILLISECONDS, 10);
+        ThreadPool threadPool = new ThreadPool(2, 10, TimeUnit.MILLISECONDS, 10, (queue, task) -> {
+            //1.死等
+                queue.put(task);
+            //2.带超时等待
+                //queue.offer(task, 500, TimeUnit.MILLISECONDS);
+            //3.让调用者放弃执行（这里因为队列满了没做任何操作）
+                //System.out.println("放弃");
+            //4.让调用者抛出异常
+                //throw new RuntimeException("任务执行失败" + task);
+            //5.让调用者自己执行任务
+                //task.run();
+        });
         for (int i = 0; i < 5; i++) {
             int j = i;
             threadPool.execute(() -> {
@@ -35,12 +46,15 @@ class ThreadPool {
     //获取任务的超时时间
     private long timeout;
     private TimeUnit timeUnit;
+    //拒绝策略
+    private RejectPolicy<Runnable> rejectPolicy;
 
-    public ThreadPool(int coreSize, long timeout, TimeUnit timeUnit, int queueCapcity) {
+    public ThreadPool(int coreSize, long timeout, TimeUnit timeUnit, int queueCapcity, RejectPolicy<Runnable> rejectPolicy) {
         this.coreSize = coreSize;
         this.timeout = timeout;
         this.timeUnit = timeUnit;
         this.taskQueue = new BlockQueue<>(queueCapcity);
+        this.rejectPolicy = rejectPolicy;
     }
 
     class Worker extends Thread{
@@ -82,7 +96,8 @@ class ThreadPool {
                 works.add(worker);
                 worker.start();
             } else {
-                taskQueue.put(task);
+                //taskQueue.put(task);
+                taskQueue.tryPut(rejectPolicy, task);
             }
         }
     }
@@ -145,12 +160,40 @@ class BlockQueue<T> {
             lock.unlock();
         }
     }
+
+    //带超时时间阻塞添加
+    public boolean offer(T t, long timeout, TimeUnit unit) {
+        lock.lock();
+        try {
+            //将timeout同意转换成纳秒
+            long nanos = unit.toNanos(timeout);
+            while (capcity == queue.size()) {
+                try {
+                    System.out.println("task等待加入任务队列:" + t);
+                    if (nanos <= 0) {
+                        return false;
+                    }
+                    nanos = fullwaitSet.awaitNanos(timeout);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println("task加入任务队列:" + t);
+            queue.addFirst(t);
+            emptyWaitSet.signal();
+            return true;
+        } finally {
+            lock.unlock();
+        }
+    }
+
     //阻塞添加
     public void put(T t) {
         lock.lock();
         try {
             while (capcity == queue.size()) {
                 try {
+                    System.out.println("task等待加入任务队列:" + t);
                     fullwaitSet.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -163,4 +206,26 @@ class BlockQueue<T> {
             lock.unlock();
         }
     }
+
+    //带拒绝策略添加
+    public void tryPut(RejectPolicy<T> rejectPolicy, T t) {
+        lock.lock();
+        try {
+            if (capcity == queue.size()) {
+                rejectPolicy.reject(this, t);
+            } else {
+                System.out.println("task加入任务队列:" + t);
+                queue.addFirst(t);
+                emptyWaitSet.signal();
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+
+//拒绝策略
+@FunctionalInterface
+interface RejectPolicy<T> {
+    void reject(BlockQueue<T> queue, T task);
 }
