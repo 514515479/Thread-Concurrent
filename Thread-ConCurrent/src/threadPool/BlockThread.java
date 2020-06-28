@@ -82,7 +82,6 @@ class ThreadPool {
                 works.add(worker);
                 worker.start();
             } else {
-                System.out.println("task加入任务队列:" + task);
                 taskQueue.put(task);
             }
         }
@@ -157,6 +156,7 @@ class BlockQueue<T> {
                     e.printStackTrace();
                 }
             }
+            System.out.println("task加入任务队列:" + t);
             queue.addFirst(t);
             emptyWaitSet.signal();
         } finally {
