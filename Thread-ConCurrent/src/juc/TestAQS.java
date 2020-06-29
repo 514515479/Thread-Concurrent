@@ -9,6 +9,17 @@ import java.util.concurrent.locks.Lock;
  * @Author: tobi
  * @Date: 2020/6/29 16:20
  *
+ * AQS:
+ * 特点：
+ *     用state属性来表示资源的状态（分独占模式和共享模式），子类需要定义如何维护这个状态，控制如何获取锁和释放锁
+ *
+ * 子类主要实现这样一些方法（默认抛出UnsupportedOperationException）
+ *     1.tryAcquire
+ *     2.tryRelease
+ *     3.tryAcquireShared
+ *     4.tryReleaseShared
+ *     5.isHeldExclusively
+ *
  * aqs自定义不可重入锁
  **/
 public class TestAQS {
