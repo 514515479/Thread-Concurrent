@@ -12,27 +12,27 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  **/
 public class TestReentrantReadWriteLock {
     public static void main(String[] args) {
-        DataContainer data = new DataContainer();
+        DataContainer dataContainer = new DataContainer();
         //读读
         new Thread(()-> {
-           data.read();
+            dataContainer.read();
         }).start();
         new Thread(()-> {
-            data.read();
+            dataContainer.read();
         }).start();
         //读写
         new Thread(()-> {
-            data.read();
+            dataContainer.read();
         }).start();
         new Thread(()-> {
-            data.write();
+            dataContainer.write();
         }).start();
         //写写
         new Thread(()-> {
-            data.write();
+            dataContainer.write();
         }).start();
         new Thread(()-> {
-            data.write();
+            dataContainer.write();
         }).start();
     }
 }
