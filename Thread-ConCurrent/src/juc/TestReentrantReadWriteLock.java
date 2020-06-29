@@ -6,9 +6,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @Author: tobi
  * @Date: 2020/6/29 20:51
  *
- * 读写锁
+ * 读写锁（用的是同一个Sync同步器，因此等待队列，state也是同一个）
  * 当读操作远远高于写操作时，这时候使用读写锁.
  * 让“读-读”可以并发，提高性能。（“读-写”、“写-写”还是互斥）
+ *
+ * 注意事项：
+ *     1.读锁支持条件变量，写锁不支持条件变量。
+ *     2.获取写锁前必须释放读锁。
  **/
 public class TestReentrantReadWriteLock {
     public static void main(String[] args) {
