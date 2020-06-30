@@ -15,6 +15,9 @@ import java.util.concurrent.CyclicBarrier;
  *
  * CyclicBarrier与CountDownLatch的主要区别：
  * CyclicBarrier是可以重用的，CyclicBarrier可以被比喻为“人满发车”
+ *
+ * 注意：
+ *     计数个数 和 调用await的线程数要一致，不然会无效
  **/
 public class TestCyclicBarrier {
     public static void main(String[] args) throws InterruptedException {
