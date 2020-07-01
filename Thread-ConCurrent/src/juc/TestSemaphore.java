@@ -7,7 +7,7 @@ import java.util.concurrent.Semaphore;
  * @Date: 2020/6/29 23:47
  *
  * Semaphore信号量（用来限制能同时访问共享资源的线程上限）
- *
+ * acquire()和release()之间的代码，同时只允许“许可数量”个线程执行
  **/
 public class TestSemaphore {
     public static void main(String[] args) {
