@@ -23,12 +23,15 @@
  **/
 public class Example5000 {
 
-    static int counter = 0;
+    static Integer counter = 0;
 
     static final Object room = new Object();
 
     public static void main(String[] args) throws InterruptedException {
         Thread t1 = new Thread(() -> {
+            //Integer为什么能调用++ 运算符
+            //jdk对Integer做了自动包装，其实只能是基本数据类型，在执行++的时候，要变成基本数据类型，返回的时候，再包装成引用类型。
+            //这里不能对counter加锁是因为i++后，对象就不是同一个了
             synchronized (room) {
                 for (int i = 0; i < 5000; i++) {
                     counter++;
