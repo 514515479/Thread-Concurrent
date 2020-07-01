@@ -136,7 +136,7 @@ public class TestThreadPoolExecutor {
     //invokeAll方法
     public static void invokeAll() throws InterruptedException {
         ExecutorService pool = Executors.newFixedThreadPool(2);
-        List<Future<Object>> list = pool.invokeAll(Arrays.asList(
+        List<Future<String>> list = pool.invokeAll(Arrays.asList(
                 () -> {
                     System.out.println("begin");
                     Thread.sleep(1000);
