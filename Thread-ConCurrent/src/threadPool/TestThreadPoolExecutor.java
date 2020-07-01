@@ -118,13 +118,10 @@ public class TestThreadPoolExecutor {
     //submit方法
     public static void submit() {
         ExecutorService pool = Executors.newFixedThreadPool(2);
-        Future<String> future = pool.submit(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                System.out.println("running...");
-                Thread.sleep(1000);
-                return "ok";
-            }
+        Future<String> future = pool.submit(() -> {
+            System.out.println("running...");
+            Thread.sleep(1000);
+            return "ok";
         });
         try {
             System.out.println(future.get());
