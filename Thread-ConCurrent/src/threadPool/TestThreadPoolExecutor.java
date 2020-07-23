@@ -133,7 +133,8 @@ public class TestThreadPoolExecutor {
         }
     }
 
-    //invokeAll方法
+    //invokeAny方法：取得第一个方法的返回值,当第一个任务结束后，会调用interrupt方法中断其它任务
+    //invokeAll方法：等线程任务执行完毕后,取得全部任务的结果值
     public static void invokeAll() throws InterruptedException {
         ExecutorService pool = Executors.newFixedThreadPool(2);
         List<Future<String>> list = pool.invokeAll(Arrays.asList(
