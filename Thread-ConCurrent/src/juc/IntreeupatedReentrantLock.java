@@ -10,6 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * 可打断的ReentrantLock
  *     注意：Synchronized和ReentrantLock的lock方法都是不可打断的
+ * lockInterruptibly可中断，只能中断被阻塞（等待锁）的线程，获得锁后不能被中断
  **/
 public class IntreeupatedReentrantLock {
 
@@ -18,6 +19,7 @@ public class IntreeupatedReentrantLock {
     public static void main(String[] args) {
 
         Thread t1 = new Thread(() -> {
+            //写成两个try的原因：
             //注意，这里如果写成try-catch-finally形式，就算catch里加了return，也会执行finally里的内容，如果被打断了，不应该执行unlock
             try {
                 //如果没有竞争，此方法就会获取到lock锁
